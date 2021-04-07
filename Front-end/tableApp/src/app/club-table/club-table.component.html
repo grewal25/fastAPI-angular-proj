@@ -1,0 +1,49 @@
+<nz-table #nzTable [nzData]="clubList" nzTableLayout="fixed">
+  <thead>
+    <tr>
+      <th nzWidth="60px"></th>
+      <th
+        *ngFor="let column of listOfColumns"
+        [nzSortOrder]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+      >
+        {{ column.name }}
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of nzTable.data; let i = index">
+      <tr>
+        <td></td>
+        <td>
+          <div [hidden]="editId === i" (click)="startEdit(i)">
+            {{ data.club_name }}
+          </div>
+          <input
+            [hidden]="editId !== i"
+            type="text"
+            nz-input
+            [(ngModel)]="data.club_name"
+            (blur)="stopEdit()"
+          />
+        </td>
+        <td>{{ data.club_address }}</td>
+        <td>
+          <a (click)="deleteRow(i)">Delete</a>
+        </td>
+      </tr>
+      <ng-container *ngFor="let dataChild of data.club_members">
+        <tr style="margin-left:10px">
+          <td></td>
+          <td colspan="1">Member Name: {{ dataChild.name | uppercase }}</td>
+          <td colspan="1">Member Age:  {{ dataChild.age }}</td>
+          <td></td>
+        </tr>
+        
+      </ng-container>
+    </ng-container>
+  </tbody>
+</nz-table>
+<button style="float:right" (click)="submitData()">Submit Data</button>
